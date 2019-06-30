@@ -1,17 +1,17 @@
-package fr.guillaumevillena.kafkalikeeventstack.broker;
+package fr.guillaumevillena.KafkaLikeEventDispatcher.broker;
 
 
-import fr.guillaumevillena.kafkalikeeventstack.Clients.AbstractKafkaLikeClient;
-import fr.guillaumevillena.kafkalikeeventstack.Clients.LocalMirrorKafkaLikeClient;
-import fr.guillaumevillena.kafkalikeeventstack.communications.*;
-import fr.guillaumevillena.kafkalikeeventstack.topic.KafkaLikeTopic;
+import fr.guillaumevillena.KafkaLikeEventDispatcher.clients.AbstractKafkaLikeClient;
+import fr.guillaumevillena.KafkaLikeEventDispatcher.clients.LocalMirrorKafkaLikeClient;
+import fr.guillaumevillena.KafkaLikeEventDispatcher.communications.*;
+import fr.guillaumevillena.KafkaLikeEventDispatcher.topic.KafkaLikeTopic;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class KafkaLikeEventStack {
 
-  private static Map<String, ClientHandle> clientOffsetStatus = new HashMap<>(); // One clientID can have multiple topics and each fr.guillaumevillena.kafkalikeeventstack.topic has an offset !
+  private static Map<String, ClientHandle> clientOffsetStatus = new HashMap<>(); // One clientID can have multiple topics and each fr.guillaumevillena.KafkaLikeEventDispatcher.topic has an offset !
   private static Map<String, KafkaLikeTopic> topics = new HashMap<>();
   private static TCPServer tcpServer;
   private static Map<ClientSocketThread, ClientHandle> clientSocketThreads = new HashMap<>();
@@ -68,7 +68,7 @@ public class KafkaLikeEventStack {
 
     if (!topics.containsKey(topicName)) {
       topics.put(topicName, new KafkaLikeTopic(topicName));
-      System.out.println("Auto Created fr.guillaumevillena.kafkalikeeventstack.topic !");
+      System.out.println("Auto Created fr.guillaumevillena.KafkaLikeEventDispatcher.topic !");
     }
 
     topics.get(topicName).pushToLog(e);
@@ -102,7 +102,7 @@ public class KafkaLikeEventStack {
         clientOffsetStatus.get(kafkaLikeClient.getUniqId()).getClientStatus().put(topic, 0);
         if (!topics.containsKey(topic)) {
           topics.put(topic, new KafkaLikeTopic(topic));
-          System.out.println("Auto Created fr.guillaumevillena.kafkalikeeventstack.topic !");
+          System.out.println("Auto Created fr.guillaumevillena.KafkaLikeEventDispatcher.topic !");
         }
       }
     }
@@ -115,7 +115,7 @@ public class KafkaLikeEventStack {
   public static void subscribe(AbstractKafkaLikeClient client, String name) {
     if (!topics.containsKey(name)) {
       topics.put(name, new KafkaLikeTopic(name));
-      System.out.println("Auto Created fr.guillaumevillena.kafkalikeeventstack.topic !");
+      System.out.println("Auto Created fr.guillaumevillena.KafkaLikeEventDispatcher.topic !");
     }
 
     if (!clientOffsetStatus.containsKey(client.getUniqId()))

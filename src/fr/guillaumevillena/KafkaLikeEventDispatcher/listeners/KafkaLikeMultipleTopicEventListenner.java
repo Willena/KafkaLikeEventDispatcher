@@ -1,4 +1,4 @@
-package fr.guillaumevillena.kafkalikeeventstack.listeners;
+package fr.guillaumevillena.KafkaLikeEventDispatcher.listeners;
 
 public interface KafkaLikeMultipleTopicEventListenner {
 

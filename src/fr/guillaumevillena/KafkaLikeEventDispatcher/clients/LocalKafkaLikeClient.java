@@ -1,7 +1,7 @@
-package fr.guillaumevillena.kafkalikeeventstack.Clients;
+package fr.guillaumevillena.KafkaLikeEventDispatcher.clients;
 
 
-import fr.guillaumevillena.kafkalikeeventstack.broker.KafkaLikeEventStack;
+import fr.guillaumevillena.KafkaLikeEventDispatcher.broker.KafkaLikeEventStack;
 
 public class LocalKafkaLikeClient extends AbstractKafkaLikeClient {
 

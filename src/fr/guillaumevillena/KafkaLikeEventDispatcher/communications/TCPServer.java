@@ -1,4 +1,4 @@
-package fr.guillaumevillena.kafkalikeeventstack.communications;
+package fr.guillaumevillena.KafkaLikeEventDispatcher.communications;
 
 
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class TCPServer implements ClientDisconnectedListener, ClientConnectedLis
 
           // infinite loop to wait for connections ( till server is active )
           while (keepGoing) {
-            System.out.println("TCPServer waiting for fr.guillaumevillena.kafkalikeeventstack.Clients on port " + port + ".");
+            System.out.println("TCPServer waiting for fr.guillaumevillena.KafkaLikeEventDispatcher.clients on port " + port + ".");
 
             // accept connection if requested from client
             Socket socket = serverSocket.accept();
@@ -95,7 +95,7 @@ public class TCPServer implements ClientDisconnectedListener, ClientConnectedLis
   }
 
 
-  // to broadcast a message to all fr.guillaumevillena.kafkalikeeventstack.Clients
+  // to broadcast a message to all fr.guillaumevillena.KafkaLikeEventDispatcher.clients
   public synchronized boolean broadcast(Object message) {
 
     for (ClientSocketThread th : clientSocketThreads) {

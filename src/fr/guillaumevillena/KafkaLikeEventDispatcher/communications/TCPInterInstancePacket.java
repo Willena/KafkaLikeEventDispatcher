@@ -1,4 +1,4 @@
-package fr.guillaumevillena.kafkalikeeventstack.communications;
+package fr.guillaumevillena.KafkaLikeEventDispatcher.communications;
 
 import java.io.Serializable;
 import java.util.UUID;

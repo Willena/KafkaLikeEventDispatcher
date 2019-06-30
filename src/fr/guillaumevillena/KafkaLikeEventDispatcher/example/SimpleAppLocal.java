@@ -1,8 +1,8 @@
-package fr.guillaumevillena.kafkalikeeventstack.example;
+package fr.guillaumevillena.KafkaLikeEventDispatcher.example;
 
-import fr.guillaumevillena.kafkalikeeventstack.Clients.LocalKafkaLikeClient;
-import fr.guillaumevillena.kafkalikeeventstack.broker.KafkaLikeEventStack;
-import fr.guillaumevillena.kafkalikeeventstack.listeners.KafkaLikeMultipleTopicEventListenner;
+import fr.guillaumevillena.KafkaLikeEventDispatcher.clients.LocalKafkaLikeClient;
+import fr.guillaumevillena.KafkaLikeEventDispatcher.broker.KafkaLikeEventStack;
+import fr.guillaumevillena.KafkaLikeEventDispatcher.listeners.KafkaLikeMultipleTopicEventListenner;
 
 public class SimpleAppLocal {
 

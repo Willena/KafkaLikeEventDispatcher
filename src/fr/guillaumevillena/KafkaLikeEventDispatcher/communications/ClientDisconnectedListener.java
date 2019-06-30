@@ -1,4 +1,4 @@
-package fr.guillaumevillena.kafkalikeeventstack.communications;
+package fr.guillaumevillena.KafkaLikeEventDispatcher.communications;
 
 public interface ClientDisconnectedListener {
     void onClientDisconnected(ClientSocketThread thread);

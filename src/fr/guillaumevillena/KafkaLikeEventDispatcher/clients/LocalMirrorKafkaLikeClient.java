@@ -1,10 +1,10 @@
-package fr.guillaumevillena.kafkalikeeventstack.Clients;
+package fr.guillaumevillena.KafkaLikeEventDispatcher.clients;
 
 
-import fr.guillaumevillena.kafkalikeeventstack.broker.KafkaLikeEventStack;
-import fr.guillaumevillena.kafkalikeeventstack.communications.ClientSocketThread;
-import fr.guillaumevillena.kafkalikeeventstack.communications.MethodNames;
-import fr.guillaumevillena.kafkalikeeventstack.communications.TCPInterInstancePacket;
+import fr.guillaumevillena.KafkaLikeEventDispatcher.broker.KafkaLikeEventStack;
+import fr.guillaumevillena.KafkaLikeEventDispatcher.communications.ClientSocketThread;
+import fr.guillaumevillena.KafkaLikeEventDispatcher.communications.MethodNames;
+import fr.guillaumevillena.KafkaLikeEventDispatcher.communications.TCPInterInstancePacket;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

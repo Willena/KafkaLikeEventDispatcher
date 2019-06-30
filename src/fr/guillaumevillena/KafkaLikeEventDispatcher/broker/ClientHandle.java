@@ -1,7 +1,7 @@
-package fr.guillaumevillena.kafkalikeeventstack.broker;
+package fr.guillaumevillena.KafkaLikeEventDispatcher.broker;
 
 
-import fr.guillaumevillena.kafkalikeeventstack.Clients.AbstractKafkaLikeClient;
+import fr.guillaumevillena.KafkaLikeEventDispatcher.clients.AbstractKafkaLikeClient;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package fr.guillaumevillena.kafkalikeeventstack.topic;
+package fr.guillaumevillena.KafkaLikeEventDispatcher.topic;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package fr.guillaumevillena.kafkalikeeventstack.Clients;
+package fr.guillaumevillena.KafkaLikeEventDispatcher.clients;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import fr.guillaumevillena.kafkalikeeventstack.listeners.KafkaLikeMultipleTopicEventListenner;
-import fr.guillaumevillena.kafkalikeeventstack.listeners.KafkaLikeSingleTopicEventListenner;
+import fr.guillaumevillena.KafkaLikeEventDispatcher.listeners.KafkaLikeMultipleTopicEventListenner;
+import fr.guillaumevillena.KafkaLikeEventDispatcher.listeners.KafkaLikeSingleTopicEventListenner;
 
 public abstract class AbstractKafkaLikeClient implements Serializable {
 

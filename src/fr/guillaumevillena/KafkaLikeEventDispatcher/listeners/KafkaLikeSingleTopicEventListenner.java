@@ -1,7 +1,7 @@
-package fr.guillaumevillena.kafkalikeeventstack.listeners;
+package fr.guillaumevillena.KafkaLikeEventDispatcher.listeners;
 
-import fr.guillaumevillena.kafkalikeeventstack.Clients.AbstractKafkaLikeClient;
-import fr.guillaumevillena.kafkalikeeventstack.broker.KafkaLikeEventStack;
+import fr.guillaumevillena.KafkaLikeEventDispatcher.clients.AbstractKafkaLikeClient;
+import fr.guillaumevillena.KafkaLikeEventDispatcher.broker.KafkaLikeEventStack;
 
 public abstract class KafkaLikeSingleTopicEventListenner implements KafkaLikeMultipleTopicEventListenner {
 

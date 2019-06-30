@@ -1,6 +1,6 @@
-package fr.guillaumevillena.kafkalikeeventstack.example;
+package fr.guillaumevillena.KafkaLikeEventDispatcher.example;
 
-import fr.guillaumevillena.kafkalikeeventstack.broker.KafkaLikeEventStack;
+import fr.guillaumevillena.KafkaLikeEventDispatcher.broker.KafkaLikeEventStack;
 
 public class ServerOnlyExample {
 

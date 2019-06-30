@@ -1,13 +1,13 @@
-package fr.guillaumevillena.kafkalikeeventstack.example;
+package fr.guillaumevillena.KafkaLikeEventDispatcher.example;
 
-import fr.guillaumevillena.kafkalikeeventstack.Clients.KafkaLikeRemoteClient;
-import fr.guillaumevillena.kafkalikeeventstack.listeners.KafkaLikeMultipleTopicEventListenner;
+import fr.guillaumevillena.KafkaLikeEventDispatcher.clients.RemoteKafkaLikeClient;
+import fr.guillaumevillena.KafkaLikeEventDispatcher.listeners.KafkaLikeMultipleTopicEventListenner;
 
 public class SimpleRemoteApp {
 
   public static void main(String[] args) {
 
-    KafkaLikeRemoteClient client = new KafkaLikeRemoteClient("localhost", 1532);
+    RemoteKafkaLikeClient client = new RemoteKafkaLikeClient("localhost", 1532);
     client.register(new String[]{"MAIN", "SEC"});
     client.addEventCallback(new KafkaLikeMultipleTopicEventListenner() {
       @Override
