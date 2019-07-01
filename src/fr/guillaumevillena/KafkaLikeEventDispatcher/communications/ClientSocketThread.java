@@ -86,7 +86,7 @@ public class ClientSocketThread extends Thread {
     while (keepGoing) {
       // read a String (which is an object)
       try {
-        cm = sInput.readObject();
+        cm = sInput.readUnshared();
         callClientMessageListener(cm);
 
       } catch (IOException e) {
@@ -121,12 +121,12 @@ public class ClientSocketThread extends Thread {
     return true;
   }
 
-  public boolean send(Object msg) {
+   public synchronized boolean send(Object msg) {
     if (!isConnectionAlive())
       return false;
 
     try {
-      sOutput.writeObject(msg);
+      sOutput.writeUnshared(msg);
     } catch (IOException e) {
       callErrorListenner("Error sending message to ", e);
     }

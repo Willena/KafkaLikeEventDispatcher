@@ -69,9 +69,9 @@ public class TCPClient implements ClientMessageListener {
     /*
      * To send a message to the server
      */
-    public void sendMessage(Object msg) {
+    synchronized public void sendMessage(Object msg) {
         try {
-            sOutput.writeObject(msg);
+            sOutput.writeUnshared(msg);
         } catch (IOException e) {
             display("Exception writing to server: " + e);
             e.printStackTrace();
@@ -106,7 +106,7 @@ public class TCPClient implements ClientMessageListener {
 
 
     @Override
-    public void onMessageReceived(ClientSocketThread clientSocketThread, Object msg) {
+     public synchronized void onMessageReceived(ClientSocketThread clientSocketThread, Object msg) {
         for (ClientMessageListener l : clientMessageListeners)
             l.onMessageReceived(null, msg);
     }
@@ -125,7 +125,7 @@ public class TCPClient implements ClientMessageListener {
         public void run() {
             while (true) {
                 try {
-                    Object object = sInput.readObject();
+                    Object object = sInput.readUnshared();
                     client.onMessageReceived(null, object);
                 } catch (IOException e) {
                     display("TCPServer has closed the connection: " + e);

@@ -54,6 +54,11 @@ public class RemoteKafkaLikeClient extends AbstractKafkaLikeClient implements Cl
   @Override
   public void askForEvent() {
     client.sendMessage(new TCPInterInstancePacket(ASK_EVENT_METHOD));
+    try {
+      Thread.sleep(50);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override

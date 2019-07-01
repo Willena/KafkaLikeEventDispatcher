@@ -120,7 +120,7 @@ public class TCPServer implements ClientDisconnectedListener, ClientConnectedLis
   }
 
   @Override
-  public void onClientConnected(ClientSocketThread clientSocketThread) {
+  public synchronized void onClientConnected(ClientSocketThread clientSocketThread) {
     System.out.println("The Client is now ready ");
     clientSocketThread.send("Hello client, this is the server ! ");
 
@@ -130,7 +130,7 @@ public class TCPServer implements ClientDisconnectedListener, ClientConnectedLis
   }
 
   @Override
-  public void onMessageReceived(ClientSocketThread clientSocketThread, Object msg) {
+  public synchronized void onMessageReceived(ClientSocketThread clientSocketThread, Object msg) {
     System.out.println(clientSocketThread + " : " + msg);
 
     for (ClientMessageListener l : clientMessageListeners) {
