@@ -6,13 +6,13 @@ package fr.guillaumevillena.KafkaLikeEventDispatcher.listeners;
  */
 public interface KafkaLikeMultipleTopicEventListenner {
 
-    /**
-     * Callback called when en event is available
-     *
-     * @param data  event data
-     * @param topic topic name
-     */
-    void onEventReceived(Object data, String topic);
+  /**
+   * Callback called when en event is available
+   *
+   * @param data  event data
+   * @param topic topic name
+   */
+  void onEventReceived(Object data, String topic);
 
 }
 

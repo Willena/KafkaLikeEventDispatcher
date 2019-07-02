@@ -10,16 +10,13 @@ import java.util.ArrayList;
  * A TCP threaded class
  */
 public class TCPServer implements ClientDisconnectedListener, ClientConnectedListener, ClientMessageListener {
+  ServerSocket serverSocket;
   private ArrayList<ClientSocketThread> clientSocketThreads = new ArrayList<>();
   private int port;
   private boolean keepGoing;
-
   private ArrayList<ClientConnectedListener> clientConnectedListeners = new ArrayList<>();
   private ArrayList<ClientDisconnectedListener> clientDisconnectedListeners = new ArrayList<>();
   private ArrayList<ClientMessageListener> clientMessageListeners = new ArrayList<>();
-
-
-  ServerSocket serverSocket;
 
   //constructor that receive the port to listen to for connection as parameter
 

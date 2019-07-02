@@ -25,7 +25,7 @@ public class SimpleRemoteApp {
     client.produceEvent("REvent8--", "MAIN");
 
 
-    while (true){
+    while (true) {
       client.askForEvent();
     }
 
