@@ -3,12 +3,20 @@ package fr.guillaumevillena.KafkaLikeEventDispatcher.broker;
 
 import fr.guillaumevillena.KafkaLikeEventDispatcher.clients.AbstractKafkaLikeClient;
 import fr.guillaumevillena.KafkaLikeEventDispatcher.clients.LocalMirrorKafkaLikeClient;
-import fr.guillaumevillena.KafkaLikeEventDispatcher.communications.*;
+import fr.guillaumevillena.KafkaLikeEventDispatcher.communications.ClientSocketThread;
+import fr.guillaumevillena.KafkaLikeEventDispatcher.communications.TCPInterInstancePacket;
+import fr.guillaumevillena.KafkaLikeEventDispatcher.communications.TCPServer;
 import fr.guillaumevillena.KafkaLikeEventDispatcher.topic.KafkaLikeTopic;
 
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The brain of the Event dispatcher
+ * This class store every message and client "instance" connected to it
+ * It also handle the TCP server if activated
+ * All methods are static
+ */
 public class KafkaLikeEventStack {
 
   private static Map<String, ClientHandle> clientOffsetStatus = new HashMap<>(); // One clientID can have multiple topics and each fr.guillaumevillena.KafkaLikeEventDispatcher.topic has an offset !
@@ -16,11 +24,30 @@ public class KafkaLikeEventStack {
   private static TCPServer tcpServer;
   private static Map<ClientSocketThread, ClientHandle> clientSocketThreads = new HashMap<>();
 
+  /**
+   * This function initalize the TCP server and connects a few callbacks to get message received
+   *
+   * @param portNumber port the server will listen on
+   * @return a instance to the TCPServer thread started
+   */
   public static Thread startTCPServer(int portNumber) {
     tcpServer = new TCPServer(portNumber);
-    tcpServer.addClientConnectedListener(new ClientConnectedListener() {
-      @Override
-      public void onClientConnected(ClientSocketThread clientSocketThread) {
+    tcpServer.addClientConnectedListener(clientSocketThread -> {
+      if (!clientSocketThreads.containsKey(clientSocketThread)) {
+
+        LocalMirrorKafkaLikeClient fakeClient = new LocalMirrorKafkaLikeClient(clientSocketThread);
+        ClientHandle handle = new ClientHandle(fakeClient.getUniqId(), ClientType.REMOTE, fakeClient);
+
+        clientSocketThreads.put(clientSocketThread, handle);
+
+      }
+    });
+
+    tcpServer.addClientDisconnectedListener(thread -> clientSocketThreads.remove(thread));
+
+    tcpServer.addClientMessageListener((clientSocketThread, msg) -> {
+      if (msg instanceof TCPInterInstancePacket) {
+
         if (!clientSocketThreads.containsKey(clientSocketThread)) {
 
           LocalMirrorKafkaLikeClient fakeClient = new LocalMirrorKafkaLikeClient(clientSocketThread);
@@ -29,41 +56,26 @@ public class KafkaLikeEventStack {
           clientSocketThreads.put(clientSocketThread, handle);
 
         }
-      }
-    });
 
-    tcpServer.addClientDisconnectedListener(new ClientDisconnectedListener() {
-      @Override
-      public void onClientDisconnected(ClientSocketThread thread) {
-        clientSocketThreads.remove(thread);
-      }
-    });
-
-    tcpServer.addClientMessageListener(new ClientMessageListener() {
-      @Override
-      public void onMessageReceived(ClientSocketThread clientSocketThread, Object msg) {
-        if (msg instanceof TCPInterInstancePacket) {
-
-          if (!clientSocketThreads.containsKey(clientSocketThread)) {
-
-            LocalMirrorKafkaLikeClient fakeClient = new LocalMirrorKafkaLikeClient(clientSocketThread);
-            ClientHandle handle = new ClientHandle(fakeClient.getUniqId(), ClientType.REMOTE, fakeClient);
-
-            clientSocketThreads.put(clientSocketThread, handle);
-
-          }
-
-          ((LocalMirrorKafkaLikeClient) (clientSocketThreads.get(clientSocketThread).getClientInstance())).processTCPInterInstancePacket((TCPInterInstancePacket) msg);
-        }
+        ((LocalMirrorKafkaLikeClient) (clientSocketThreads.get(clientSocketThread).getClientInstance())).processTCPInterInstancePacket((TCPInterInstancePacket) msg);
       }
     });
     return tcpServer.start();
   }
 
+  /**
+   * Function called to stop the TCP Server
+   */
   public static void stopTCPServer() {
 
   }
 
+  /**
+   * A Simple function to produce and add an event to the log of a KafkaLikeTopic
+   *
+   * @param e         the Serializable object to be added in the Event log
+   * @param topicName the name of the topic the event should be added. It will be created automatically if not already existing
+   */
   public static void produce(Object e, String topicName) {
 
     if (!topics.containsKey(topicName)) {
@@ -75,6 +87,14 @@ public class KafkaLikeEventStack {
     System.out.println("Added new event : " + e.toString());
   }
 
+  /**
+   * If the client wants to receive the next message in the queue, it needs to call the commit function
+   * after reading the initial message. This function will update the current client offset that will then provide
+   * the ability to send the next event to the client
+   *
+   * @param client    the client commiting
+   * @param topicName the topic to commit into
+   */
   public static void commit(AbstractKafkaLikeClient client, String topicName) {
 
     if (!topics.containsKey(topicName))
@@ -95,6 +115,13 @@ public class KafkaLikeEventStack {
   }
 
 
+  /**
+   * This method should be called to register the client in the system so that everything get initialized internally.
+   * At this point you can already subscribe to topics
+   *
+   * @param kafkaLikeClient the client that is registering
+   * @param topicNames      a list of topic names
+   */
   public static void register(AbstractKafkaLikeClient kafkaLikeClient, String[] topicNames) {
     if (!clientOffsetStatus.containsKey(kafkaLikeClient.getUniqId())) {
       clientOffsetStatus.put(kafkaLikeClient.getUniqId(), new ClientHandle(kafkaLikeClient.getUniqId(), ClientType.LOCAL, kafkaLikeClient));
@@ -112,6 +139,12 @@ public class KafkaLikeEventStack {
     }
   }
 
+  /**
+   * Ask the Event log manager to also send event for a specified topic
+   *
+   * @param client the client subscribing to a topic
+   * @param name   the topic name to be subscribed
+   */
   public static void subscribe(AbstractKafkaLikeClient client, String name) {
     if (!topics.containsKey(name)) {
       topics.put(name, new KafkaLikeTopic(name));
@@ -127,6 +160,11 @@ public class KafkaLikeEventStack {
   }
 
 
+  /**
+   * The method needs to be pooled at a regular basis if you want to receive events and message from the log
+   *
+   * @param client the client requesting events
+   */
   public static void askForEvent(AbstractKafkaLikeClient client) {
     if (!clientOffsetStatus.containsKey(client.getUniqId()))
       register(client, new String[]{});
@@ -137,7 +175,7 @@ public class KafkaLikeEventStack {
       if (client.getCurrentOfsset(key) > topic.getEventLog().size())
         client.setOffset(topic.getEventLog().size(), key);
 
-      if (client.getCurrentOfsset(key) == clientOffsetStatus.get(client.getUniqId()).getClientStatus().get(key)) {
+      if (client.getCurrentOfsset(key).equals(clientOffsetStatus.get(client.getUniqId()).getClientStatus().get(key))) {
         //client.eventCallback(fifo.get(client.getCurrentOfsset()));
         if ((!topic.getEventLog().isEmpty()) && (client.getCurrentOfsset(key) < topic.getEventLog().size())) {
           clientOffsetStatus.get(client.getUniqId()).getClientStatus().put(key, client.getCurrentOfsset(key) + 1);

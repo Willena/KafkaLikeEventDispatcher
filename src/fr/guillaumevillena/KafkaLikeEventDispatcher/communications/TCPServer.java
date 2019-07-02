@@ -6,7 +6,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-// the server that can be run as a console
+/**
+ * A TCP threaded class
+ */
 public class TCPServer implements ClientDisconnectedListener, ClientConnectedListener, ClientMessageListener {
   private ArrayList<ClientSocketThread> clientSocketThreads = new ArrayList<>();
   private int port;
@@ -21,10 +23,20 @@ public class TCPServer implements ClientDisconnectedListener, ClientConnectedLis
 
   //constructor that receive the port to listen to for connection as parameter
 
+  /**
+   * Constructor, initialize the TCP server to listen on a port given port
+   *
+   * @param port the port to listen on
+   */
   public TCPServer(int port) {
     this.port = port;
   }
 
+  /**
+   * Start the server thread and listen for event on the socket
+   *
+   * @return the thread instance
+   */
   public Thread start() {
     keepGoing = true;
     //create socket server and wait for connection requests
@@ -71,11 +83,16 @@ public class TCPServer implements ClientDisconnectedListener, ClientConnectedLis
 
   }
 
-  // to stop the server
+  /**
+   * Method that can be used to close the TCP server. This will stop the Thread loop
+   */
   protected void stop() {
     keepGoing = false;
   }
 
+  /**
+   * Method called by the server thread when it finishes. It clears all remaining client.
+   */
   private void onStop() {
     try {
       serverSocket.close();
@@ -95,7 +112,12 @@ public class TCPServer implements ClientDisconnectedListener, ClientConnectedLis
   }
 
 
-  // to broadcast a message to all fr.guillaumevillena.KafkaLikeEventDispatcher.clients
+  /**
+   * A broadcast method to send a message to all connected clients
+   *
+   * @param message object to send to all
+   * @return True if the message has been sent
+   */
   public synchronized boolean broadcast(Object message) {
 
     for (ClientSocketThread th : clientSocketThreads) {
@@ -106,11 +128,21 @@ public class TCPServer implements ClientDisconnectedListener, ClientConnectedLis
 
   }
 
-  synchronized void remove(ClientSocketThread clientSocketThread) {
+  /**
+   * A method to remove a client from the list of connection client
+   *
+   * @param clientSocketThread the client to be removed
+   */
+  private synchronized void remove(ClientSocketThread clientSocketThread) {
     clientSocketThreads.remove(clientSocketThread);
   }
 
 
+  /**
+   * Event listener to process client disconnections
+   *
+   * @param thread the current socket thread
+   */
   @Override
   public void onClientDisconnected(ClientSocketThread thread) {
     remove(thread);
@@ -119,6 +151,11 @@ public class TCPServer implements ClientDisconnectedListener, ClientConnectedLis
     }
   }
 
+  /**
+   * Event listener to process client connexions
+   *
+   * @param clientSocketThread the current socket thread
+   */
   @Override
   public synchronized void onClientConnected(ClientSocketThread clientSocketThread) {
     System.out.println("The Client is now ready ");
@@ -129,6 +166,12 @@ public class TCPServer implements ClientDisconnectedListener, ClientConnectedLis
     }
   }
 
+  /**
+   * Event listener to forward and process a received message
+   *
+   * @param clientSocketThread the current socket thread
+   * @param msg                the received message
+   */
   @Override
   public synchronized void onMessageReceived(ClientSocketThread clientSocketThread, Object msg) {
     System.out.println(clientSocketThread + " : " + msg);
@@ -138,28 +181,34 @@ public class TCPServer implements ClientDisconnectedListener, ClientConnectedLis
     }
   }
 
+  /**
+   * Adds a new listener
+   *
+   * @param l the listener
+   */
   public void addClientConnectedListener(ClientConnectedListener l) {
     clientConnectedListeners.add(l);
   }
 
+
+  /**
+   * Adds a new listener
+   *
+   * @param l the listener
+   */
   public void addClientDisconnectedListener(ClientDisconnectedListener l) {
     clientDisconnectedListeners.add(l);
   }
 
+
+  /**
+   * Adds a new listener
+   *
+   * @param l the listener
+   */
   public void addClientMessageListener(ClientMessageListener l) {
     clientMessageListeners.add(l);
   }
-
-//  public static void main(String[] args) throws PlayerCountInvalid {
-//    // start server on port 1500 unless a PortNumber is specified
-//    int portNumber = 1500;
-//    TCPServer server = new TCPServer(portNumber);
-//    try {
-//      server.start().join();
-//    } catch (InterruptedException e) {
-//      e.printStackTrace();
-//    }
-//  }
 
 
 }
