@@ -1,4 +1,4 @@
-KafkaLikeEventDispatecher
+KafkaLikeEventDispatecher [![](https://jitpack.io/v/Willena/KafkaLikeEventDispatcher.svg)](https://jitpack.io/#Willena/KafkaLikeEventDispatcher)
 =========================
 
 This project is one more event dispatcher for java applications. This event dispatcher is built on the same principle 
