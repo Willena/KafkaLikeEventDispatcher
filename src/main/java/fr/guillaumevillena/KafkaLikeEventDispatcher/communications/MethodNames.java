@@ -11,8 +11,8 @@ public enum MethodNames {
   REGISTER_METHOD("register"),
   SET_OFFSET_METHOD("setOffset"),
   FIRE_CALLBACK("fireCallback"),
-  UNREGISTER_METHOD("unregister");
-
+  UNREGISTER_METHOD("unregister"),
+  SET_UUID("setUniqID");
 
   private final String name;
 

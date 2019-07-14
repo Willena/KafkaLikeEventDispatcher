@@ -23,10 +23,11 @@ public class SimpleRemoteApp {
     client.produceEvent("REvent6--", "MAIN");
     client.produceEvent("REvent7--", "MAIN");
     client.produceEvent("REvent8--", "MAIN");
+    client.produceEvent("Event for self", client.getUniqId());
 
 
     while (true) {
-      client.askForEvent();
+      client.askForEvent(1000);
     }
 
   }

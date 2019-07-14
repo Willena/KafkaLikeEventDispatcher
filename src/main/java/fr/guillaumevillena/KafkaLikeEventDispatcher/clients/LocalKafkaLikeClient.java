@@ -11,7 +11,17 @@ import fr.guillaumevillena.KafkaLikeEventDispatcher.broker.KafkaLikeEventStack;
 public class LocalKafkaLikeClient extends AbstractKafkaLikeClient {
 
   public void askForEvent() {
+    askForEvent(0);
+  }
+
+  @Override
+  public void askForEvent(long sleepTime) {
     KafkaLikeEventStack.askForEvent(this);
+    try {
+      Thread.sleep(sleepTime);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
   }
 
   public void commit(String topic) {

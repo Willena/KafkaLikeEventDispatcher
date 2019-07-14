@@ -43,6 +43,10 @@ public class RemoteKafkaLikeClient extends AbstractKafkaLikeClient implements Cl
     client.disconnect();
   }
 
+  public void setUniqID(String uuid) {
+    uniqId = uuid;
+  }
+
   /**
    * Callback triggered when a message from the server is received.
    * The message consists in the method name to call with th required parameter.
@@ -77,9 +81,14 @@ public class RemoteKafkaLikeClient extends AbstractKafkaLikeClient implements Cl
    */
   @Override
   public void askForEvent() {
+    askForEvent(80);
+  }
+
+  @Override
+  public void askForEvent(long sleepTime) {
     client.sendMessage(new TCPInterInstancePacket(ASK_EVENT_METHOD));
     try {
-      Thread.sleep(50);
+      Thread.sleep(sleepTime);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }

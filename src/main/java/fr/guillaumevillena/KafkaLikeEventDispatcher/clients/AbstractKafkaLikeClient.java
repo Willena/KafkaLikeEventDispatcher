@@ -14,7 +14,7 @@ import java.util.UUID;
  */
 public abstract class AbstractKafkaLikeClient implements Serializable {
 
-  private final String uniqId;
+  protected String uniqId;
   private Map<String, ArrayList<KafkaLikeMultipleTopicEventListenner>> perTopicListenners = new HashMap<>();
   private ArrayList<KafkaLikeMultipleTopicEventListenner> globalListerner = new ArrayList<>();
   private Map<String, Integer> perTopicOffsets = new HashMap<>();
@@ -30,6 +30,8 @@ public abstract class AbstractKafkaLikeClient implements Serializable {
    * This method is a relay to the askForEvent inside the KafkaLikeEventStack class
    */
   public abstract void askForEvent();
+
+  public abstract void askForEvent(long sleepTime);
 
 
   /**

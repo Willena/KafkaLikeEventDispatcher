@@ -19,7 +19,9 @@ public class LocalMirrorKafkaLikeClient extends AbstractKafkaLikeClient {
   private ClientSocketThread clientSocketThread;
 
   public LocalMirrorKafkaLikeClient(ClientSocketThread thread) {
+    super();
     this.clientSocketThread = thread;
+    clientSocketThread.send(new TCPInterInstancePacket(MethodNames.SET_UUID, new String[]{getUniqId()}));
   }
 
   /**
@@ -36,12 +38,12 @@ public class LocalMirrorKafkaLikeClient extends AbstractKafkaLikeClient {
 
       // get the method name and call it with arguments given as parametter...
       for (Method m : this.getClass().getMethods()) {
-        if (m.getName().equals(packet.getMethodNameAsString())) {
+        if (packet.getArguments() != null && m.getName().equals(packet.getMethodNameAsString()) && m.getParameterCount() == packet.getArguments().length) {
           System.out.println("MEthod : " + packet.getMethodNameAsString());
-          if (packet.getArguments() != null)
-            m.invoke(this, packet.getArguments());
-          else
-            m.invoke(this);
+          m.invoke(this, packet.getArguments());
+          break;
+        } else if (packet.getArguments() == null && m.getName().equals(packet.getMethodNameAsString()) && m.getParameterCount() == 0) {
+          m.invoke(this);
           break;
         }
       }
@@ -83,9 +85,18 @@ public class LocalMirrorKafkaLikeClient extends AbstractKafkaLikeClient {
    * As this is a conenctor between the remote client and the server, this method is triggered by the remote client
    * so it calls the server via a method call
    */
-  @Override
   public void askForEvent() {
+    askForEvent(0);
+  }
+
+  @Override
+  public void askForEvent(long sleepTime) {
     KafkaLikeEventStack.askForEvent(this);
+    try {
+      Thread.sleep(sleepTime);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -129,6 +140,5 @@ public class LocalMirrorKafkaLikeClient extends AbstractKafkaLikeClient {
   public void produceEvent(Object o, String topic1) {
     KafkaLikeEventStack.produce(o, topic1);
   }
-
 
 }
