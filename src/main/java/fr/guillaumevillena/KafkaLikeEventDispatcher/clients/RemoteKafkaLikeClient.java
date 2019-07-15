@@ -114,7 +114,7 @@ public class RemoteKafkaLikeClient extends AbstractKafkaLikeClient implements Cl
    * Call the produce method in the KafkaLikeEventStack remotely
    */
   @Override
-  public void produceEvent(Object o, String topic1) {
+  public void produceEvent(String topic1, Object o) {
     client.sendMessage(new TCPInterInstancePacket(PUSH_EVENT_METHOD, new Object[]{o, topic1}));
   }
 

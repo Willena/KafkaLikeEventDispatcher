@@ -55,7 +55,7 @@ public abstract class AbstractKafkaLikeClient implements Serializable {
   /**
    * This method is a relay to the askForEvent inside the KafkaLikeEventStack class
    */
-  public abstract void produceEvent(Object o, String topic1);
+  public abstract void produceEvent(String topic1, Object o);
 
 
   /**

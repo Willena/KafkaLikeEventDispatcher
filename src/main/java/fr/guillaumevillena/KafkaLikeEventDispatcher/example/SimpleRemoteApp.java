@@ -17,13 +17,13 @@ public class SimpleRemoteApp {
     });
 
 
-    client.produceEvent("REvent1--", "MAIN");
-    client.produceEvent("REvent2--", "SEC");
-    client.produceEvent("REvent5--", "MAIN");
-    client.produceEvent("REvent6--", "MAIN");
-    client.produceEvent("REvent7--", "MAIN");
-    client.produceEvent("REvent8--", "MAIN");
-    client.produceEvent("Event for self", client.getUniqId());
+    client.produceEvent("MAIN", "REvent1--");
+    client.produceEvent("SEC", "REvent2--");
+    client.produceEvent("MAIN", "REvent5--");
+    client.produceEvent("MAIN", "REvent6--");
+    client.produceEvent("MAIN", "REvent7--");
+    client.produceEvent("MAIN", "REvent8--");
+    client.produceEvent(client.getUniqId(), "Event for self");
 
 
     while (true) {

@@ -19,9 +19,9 @@ import java.util.Map;
  */
 public class KafkaLikeEventStack {
 
-  private static final String BROKER_PREFIX = "__BROKER_";
-  private static final String NEW_CLIENTS_TOPIC = BROKER_PREFIX + "NEW_CLIENTS";
-  private static final String DISCONECT_CLIENTS_TOPIC = BROKER_PREFIX + "DISCONECT_CLIENTS";
+  public static final String BROKER_PREFIX = "__BROKER_";
+  public static final String NEW_CLIENTS_TOPIC = BROKER_PREFIX + "NEW_CLIENTS";
+  public static final String DISCONECT_CLIENTS_TOPIC = BROKER_PREFIX + "DISCONECT_CLIENTS";
   private static Map<String, ClientHandle> clientOffsetStatus = new HashMap<>(); // One clientID can have multiple topics and each fr.guillaumevillena.KafkaLikeEventDispatcher.topic has an offset !
   private static Map<String, KafkaLikeTopic> topics = new HashMap<>();
   private static TCPServer tcpServer;

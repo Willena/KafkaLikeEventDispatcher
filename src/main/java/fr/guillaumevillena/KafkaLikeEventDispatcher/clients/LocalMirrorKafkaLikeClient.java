@@ -133,11 +133,11 @@ public class LocalMirrorKafkaLikeClient extends AbstractKafkaLikeClient {
   /**
    * This is a simple relay to directly send the data from the remote client to the KafkaLikeEventStack
    *
-   * @param o      the object to be added inside the event log
    * @param topic1 the topic name
+   * @param o      the object to be added inside the event log
    */
   @Override
-  public void produceEvent(Object o, String topic1) {
+  public void produceEvent(String topic1, Object o) {
     KafkaLikeEventStack.produce(o, topic1);
   }
 

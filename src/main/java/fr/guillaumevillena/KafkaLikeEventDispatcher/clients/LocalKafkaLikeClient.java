@@ -36,7 +36,7 @@ public class LocalKafkaLikeClient extends AbstractKafkaLikeClient {
     KafkaLikeEventStack.register(this, strings);
   }
 
-  public void produceEvent(Object o, String topic1) {
+  public void produceEvent(String topic1, Object o) {
     KafkaLikeEventStack.produce(o, topic1);
   }
 }

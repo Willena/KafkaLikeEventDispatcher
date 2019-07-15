@@ -28,12 +28,12 @@ public class SimpleAppLocal {
     });
 
 
-    client.produceEvent("LEvent1", "MAIN");
-    client.produceEvent("LEvent2", "SEC");
-    client.produceEvent("LEvent5", "MAIN");
-    client.produceEvent("LEvent6", "MAIN");
-    client.produceEvent("LEvent7", "MAIN");
-    client.produceEvent("LEvent8", "MAIN");
+    client.produceEvent("MAIN", "LEvent1");
+    client.produceEvent("SEC", "LEvent2");
+    client.produceEvent("MAIN", "LEvent5");
+    client.produceEvent("MAIN", "LEvent6");
+    client.produceEvent("MAIN", "LEvent7");
+    client.produceEvent("MAIN", "LEvent8");
 
 
     while (true) {
