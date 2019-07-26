@@ -115,7 +115,7 @@ public class RemoteKafkaLikeClient extends AbstractKafkaLikeClient implements Cl
    */
   @Override
   public void produceEvent(String topic1, Object o) {
-    client.sendMessage(new TCPInterInstancePacket(PUSH_EVENT_METHOD, new Object[]{o, topic1}));
+    client.sendMessage(new TCPInterInstancePacket(PUSH_EVENT_METHOD, new Object[]{topic1, o}));
   }
 
   /**
