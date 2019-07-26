@@ -4,6 +4,7 @@ package fr.guillaumevillena.KafkaLikeEventDispatcher.clients;
 import fr.guillaumevillena.KafkaLikeEventDispatcher.broker.KafkaLikeEventStack;
 
 /**
+ * @deprecated
  * A local client implementation.
  * This is meant to be used in the same application where the KafkaLikeEventStack is initialized
  * This is basically a simple relay to the KafkaLikeEventStack class

@@ -51,4 +51,8 @@ public class KafkaLikeTopic {
   public ArrayList<Object> getEventLog() {
     return eventLog;
   }
+
+  public String getName() {
+    return name;
+  }
 }

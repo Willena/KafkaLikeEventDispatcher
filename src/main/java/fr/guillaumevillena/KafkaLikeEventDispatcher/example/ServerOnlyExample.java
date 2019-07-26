@@ -7,11 +7,10 @@ import fr.guillaumevillena.KafkaLikeEventDispatcher.broker.KafkaLikeEventStack;
  */
 public class ServerOnlyExample {
 
-  public static void main(String[] args) {
-    KafkaLikeEventStack.startTCPServer(1532);
+  public static void main(String[] args) throws InterruptedException {
+    Thread t = KafkaLikeEventStack.startTCPServer(1532);
 
-    while (true) {
-    }
+    t.join();
   }
 
 }

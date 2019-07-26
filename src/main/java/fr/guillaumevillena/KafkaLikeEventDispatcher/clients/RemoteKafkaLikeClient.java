@@ -81,7 +81,7 @@ public class RemoteKafkaLikeClient extends AbstractKafkaLikeClient implements Cl
    */
   @Override
   public void askForEvent() {
-    askForEvent(80);
+    askForEvent(100);
   }
 
   @Override

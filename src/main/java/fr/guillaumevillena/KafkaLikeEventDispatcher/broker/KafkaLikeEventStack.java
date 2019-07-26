@@ -92,7 +92,8 @@ public class KafkaLikeEventStack {
       System.out.println("Auto Created fr.guillaumevillena.KafkaLikeEventDispatcher.topic !");
     }
 
-    topics.get(topicName).pushToLog(e);
+    KafkaLikeTopic topic = topics.get(topicName);
+    topic.pushToLog(e);
     System.out.println("Added new event : " + e.toString());
   }
 
@@ -177,15 +178,21 @@ public class KafkaLikeEventStack {
     for (String key : clientOffsetStatus.get(client.getUniqId()).getClientStatus().keySet()) {
       KafkaLikeTopic topic = topics.get(key);
 
-      if (client.getCurrentOfsset(key) > topic.getEventLog().size())
-        client.setOffset(topic.getEventLog().size(), key);
+      askForEventOnTopic(client, topic);
 
-      if (client.getCurrentOfsset(key).equals(clientOffsetStatus.get(client.getUniqId()).getClientStatus().get(key))) {
-        //client.eventCallback(fifo.get(client.getCurrentOfsset()));
-        if ((!topic.getEventLog().isEmpty()) && (client.getCurrentOfsset(key) < topic.getEventLog().size())) {
-          clientOffsetStatus.get(client.getUniqId()).getClientStatus().put(key, client.getCurrentOfsset(key) + 1);
-          client.fireCallback(topic.getEventLog().get(client.getCurrentOfsset(key)), key);
-        }
+    }
+  }
+
+  public static void askForEventOnTopic(AbstractKafkaLikeClient client, KafkaLikeTopic topic) {
+
+    if (client.getCurrentOfsset(topic.getName()) > topic.getEventLog().size())
+      client.setOffset(topic.getEventLog().size(), topic.getName());
+
+    if (client.getCurrentOfsset(topic.getName()).equals(clientOffsetStatus.get(client.getUniqId()).getClientStatus().get(topic.getName()))) {
+
+      if ((!topic.getEventLog().isEmpty()) && (client.getCurrentOfsset(topic.getName()) < topic.getEventLog().size())) {
+        clientOffsetStatus.get(client.getUniqId()).getClientStatus().put(topic.getName(), client.getCurrentOfsset(topic.getName()) + 1);
+        client.fireCallback(topic.getEventLog().get(client.getCurrentOfsset(topic.getName())), topic.getName());
       }
     }
   }
